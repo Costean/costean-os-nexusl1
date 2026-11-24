@@ -1,0 +1,10 @@
+{
+  "name": "costean-nexus-ui",
+  "private": true,
+  "version": "1.0.4.4",
+  "type": "module",
+  "license": "GPL-3.0-or-later",
+  "description": "Costean OS web UI for the Nexus L1 (talks to the stock nexus.v1.0.4.4 /api/system v1 API)",
+  "scripts": { "build": "node scripts/version.mjs && vite build && node scripts/gzip-dist.mjs", "test": "vitest run", "mock": "node e2e/mock-server.mjs", "shots": "node e2e/shots.mjs" },
+  "devDependencies": { "@sveltejs/vite-plugin-svelte": "^7.3.1", "svelte": "^5.57.3", "vite": "^8.3.5", "vitest": "^5.1.0" }
+}
