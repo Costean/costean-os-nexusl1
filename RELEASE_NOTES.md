@@ -1,25 +1,34 @@
-# Costean OS for the BitLuck Nexus L1, v1.0.4.4-costean.9 (experimental)
+# Costean OS for the BitLuck Nexus L1, v1.0.4.4-costean.10 (experimental)
 
-Web UI release. The app (firmware + LCD) is byte for byte the costean.8 app; only `www.bin` changed.
+LCD colour release. The LCD now uses the same copper **Lode** colours as the web UI instead of the old blue.
 
-- **Copper "Lode" theme** for the whole web UI (same palette as Costean OS on the NerdOctAxe).
-- **Profiles** (new page): Eco / Stock / Turbo, taken from the firmware's own values: eco 1100 MHz / 1200 mV, stock 1300 / 1300, Turbo one firmware frequency step above stock (1350 / 1350), capped at +50 MHz / +50 mV and the firmware limits. The active profile is worked out from the applied frequency and voltage. Turbo asks you to type `ABOVE STOCK`.
-- **Schedules** (new tab): switch profile and the LCD auto screen-off at set times and days.
-  - *Schedules run from this page; keep a browser tab open on an always-on device. The miner itself can't run them.* The stock firmware has no scheduler or time zone, and no extra hardware or helper program is needed.
-  - Up to 8 windows (overnight and all-day allowed), a base profile/screen for outside the windows, week view, next action, a log of applied changes, and JSON export / import.
-  - Time zone of your choice (default America/New_York), DST-aware. The lowest-power profile wins overlaps. Values are checked against the firmware limits before every write, and a schedule that uses Turbo needs `ABOVE STOCK` when saved.
-  - The schedule, log and history live in the browser (per miner). Screen control is the firmware's one switch, auto screen-off; the LCD has no dim setting.
-- **History** (new page): the miner's own last 3 hours, plus 15-minute averages kept in the browser for 30 days. CSV export.
-- **Dashboard**: a summary strip (profile, health score, pool ping / loss, efficiency, next schedule change, uptime) and a health & insights panel (0–100 score: temperatures, VR, fan, input voltage, shares, pool ping / packet loss, hashrate stability). Board-level only; there are no per-chip readings.
-- **Pools**: ping and packet loss per pool.
-- **System & Network**: Ethernet DHCP / static IP for boards with a port (stock `/api/system/ethernet/config`, applies after restart).
-- Command palette: `turbo`, `schedules`, `history`.
-- Unchanged: stock BitLuck nexus.v1.0.4.4 mining code, stock defaults 1300 MHz / 1300 mV, 6x BM1491 LCD art, partition layout.
-- **Install:** coming from costean.8, OTA-upload only `www.bin`. From older versions, upload `esp-miner-NexusL1.bin` and then `www.bin`. Over USB, flash the factory image at 0x0 (this resets settings).
+- **LCD:** the 9 built-in screen images are redrawn from the same source (`tools/lcd/lcd-bgmain.cpp`) with only the palette swapped to the web UI's Lode colours:
+
+  | Role | costean.9 (blue) | costean.10 (Lode) |
+  | --- | --- | --- |
+  | Screen background | `#070B1C` | `#0A0B0E` |
+  | Card fill | `#10173A` | `#181B21` |
+  | Splash / portal card | `#0C1230` | `#121418` |
+  | Card border | `#2E3B78` | `#343842` |
+  | Card accent (default) | `#46549E` | `#4A505C` |
+  | Text | `#EAF0FF` | `#F3EDE4` |
+  | Muted text | `#8D98CC` | `#8E939C` |
+  | Accent (gauge, logo, accent bars) | `#4FE3FF` | `#EE8A4C` copper |
+  | Accent 2 ("OS", bars) | `#2F7BFF` | `#D9733A` deep copper |
+  | Secondary | `#5B8CFF` | `#3FD8C2` teal |
+  | Ice | `#8CD6FF` | `#7FE6D6` |
+  | OK / stock | `#5CF2A6` | `#86E39A` |
+  | Warning | `#FFC75A` | `#FFB547` |
+  | Block found gold | `#FFD66B` | `#F6CB6E` |
+
+  The uptime text colour (one 32-bit colour constant, read only by that label) goes from `#8D98CC` to `#8E939C`. Same layout, sizes, positions and text as costean.9.
+- **Unchanged:** stock BitLuck nexus.v1.0.4.4 mining, ASIC, power, fan and protection code; stock defaults 1300 MHz / 1300 mV; 6x BM1491; partition layout. The live values drawn by the firmware keep their own colours (white / light grey), and the red overheat box is drawn by the firmware.
+- **Web UI:** unchanged apart from the version label (costean.10).
+- **Install:** OTA-upload `esp-miner-NexusL1.bin`, wait for the reboot, then `www.bin`. Over USB, flash the factory image at 0x0 (this resets settings).
 
 | File | SHA-256 |
 | --- | --- |
-| `esp-miner-factory-NexusL1-v1.0.4.4-costean.9.bin` | `0e165859b1b739a1139611e315be9f315fcb7e9da5711d39850ce87f33bce28c` |
-| `costean-nexusl1-factory-v1.0.4.4-costean.9.zip` | `ac423987d347956f4b483b16a3b08e51948f652dfdb066c31281e41cd8afd3aa` |
-| `esp-miner-NexusL1.bin` | `1759564dd23eca150efb66917496180cdfcb71f333b47976eee48ed932bf9e44` |
-| `www.bin` | `80f7f75695b569910155e56ed90d27679be904c776642e2fe0c4debd3b4974a5` |
+| `esp-miner-factory-NexusL1-v1.0.4.4-costean.10.bin` | `5dd46a60f07a8d6fa16eab6e0cee17f7f6bdb87b439f425b9094a3b02ac4b73c` |
+| `costean-nexusl1-factory-v1.0.4.4-costean.10.zip` | `21f10a9179daf09fbc15d6c0be4eeee4248861727c5e82a677f57659efd16056` |
+| `esp-miner-NexusL1.bin` | `2481da17c30fe02515ddfc9348e3e5fffafc4c51dd85d4c4134c8bf2ad660db8` |
+| `www.bin` | `b3c368928140ea983d2838e2b6e4e6443dc4bc85af69c7a02dbeddd0a4125296` |

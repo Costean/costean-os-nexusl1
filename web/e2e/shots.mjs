@@ -1,4 +1,4 @@
-// Costean OS (NexusL1) v1.0.4.4-costean.9 web UI: screenshots + checks against the DEMO mock only (never a real miner).
+// Costean OS (NexusL1) v1.0.4.4-costean.10 web UI: screenshots + checks against the DEMO mock only (never a real miner).
 import { chromium } from 'playwright-core';
 import { spawn } from 'node:child_process'; import fs from 'node:fs';
 const OUT = process.env.SCREENS || 'shots/main'; fs.mkdirSync(OUT, { recursive: true });
@@ -6,7 +6,7 @@ let fail = 0; const ok = (c, m) => { console.log(c ? '  ✓' : '  ✗', m); if (
 async function withMock(scenario, port, fn, extraEnv = {}) {
   const srv = spawn('node', ['e2e/mock-server.mjs'], { stdio: 'ignore', env: { ...process.env, PORT: String(port), SCENARIO: scenario, ...extraEnv } });
   await new Promise(r => setTimeout(r, 700)); const URL = `http://127.0.0.1:${port}/`;
-  const v = await (await fetch(URL + 'version.json')).json(); if (v.www !== (extraEnv.SERVED_WWW_VERSION || '1.0.4.4-costean.9')) throw new Error('port ' + port + ' is serving another build: ' + v.www);
+  const v = await (await fetch(URL + 'version.json')).json(); if (v.www !== (extraEnv.SERVED_WWW_VERSION || '1.0.4.4-costean.10')) throw new Error('port ' + port + ' is serving another build: ' + v.www);
   const browser = await chromium.launch({ executablePath: process.env.CHROME || undefined, args: ['--no-sandbox'] });
   try { await fn(browser, URL); } finally { await browser.close(); srv.kill(); }
 }
@@ -21,7 +21,7 @@ await withMock('normal', 8491, async (browser, URL) => {
   const shots = [
     ['web-01-dashboard', 'dashboard', async p => { const t = await p.textContent('body'); const mx = await p.textContent('[data-testid=matrix]');
       return t.includes('MH/s') && !t.includes('TH/s') && (await p.locator('.chip').count()) === 0 && /^5[67]\.\d/.test(await p.textContent('[data-testid=board-temp]')) && (await p.textContent('[data-testid=chip-count]')).includes('6 × BM1491')
-        && (await p.textContent('.pill.mono')).includes('×6') && !/×\s?4|4 chips|Chip [1-6]|hottest|Chip max/.test(t) && !/(^|[^0-9])0\.0\s*°C/.test(mx) && (await p.textContent('[data-testid=ui-version]')).includes('1.0.4.4-costean.9') && t.includes('VR temp')
+        && (await p.textContent('.pill.mono')).includes('×6') && !/×\s?4|4 chips|Chip [1-6]|hottest|Chip max/.test(t) && !/(^|[^0-9])0\.0\s*°C/.test(mx) && (await p.textContent('[data-testid=ui-version]')).includes('1.0.4.4-costean.10') && t.includes('VR temp')
         && (await p.locator('[data-testid=summary-strip]').count()) === 1 && /^\d+/.test(await p.textContent('[data-testid=health-score]')) && (await p.textContent('[data-testid=insights]')).includes('All checks passed') && (await p.textContent('[data-testid=pool-split-card]')).includes('% loss'); }],
     ['web-02-mining', 'mining', async p => (await p.textContent('[data-testid=mode-pill]')).includes('STOCK | 1300 MHz | 1300 mV')],
     ['web-02b-profiles', 'profiles', async p => (await p.textContent('[data-testid=active-profile]')) === 'Stock' && (await p.textContent('[data-testid=profile-eco]')).includes('1100') && (await p.textContent('[data-testid=profile-turbo]')).includes('1350') && await p.locator('[data-testid=apply-stock]').isDisabled()],
@@ -141,7 +141,7 @@ await withMock('normal', 8495, async (browser, URL) => {
 await withMock('normal', 8496, async (browser, URL) => {
   const p = await (await browser.newContext()).newPage(); await p.goto(URL); await p.waitForTimeout(6000);
   const s = await (await fetch(URL + '__served')).json();
-  ok(s.index === 2 && (await p.evaluate(() => sessionStorage.getItem('costean.wwwReload'))) === '1.0.4.4-costean.10', 'version reload: other www version on the miner, reloaded exactly once (index loads ' + s.index + ')');
-  ok((await p.textContent('[data-testid=ui-version]')).includes('1.0.4.4-costean.9'), 'version reload: page still works after reload');
-}, { SERVED_WWW_VERSION: '1.0.4.4-costean.10' });
+  ok(s.index === 2 && (await p.evaluate(() => sessionStorage.getItem('costean.wwwReload'))) === '1.0.4.4-costean.11', 'version reload: other www version on the miner, reloaded exactly once (index loads ' + s.index + ')');
+  ok((await p.textContent('[data-testid=ui-version]')).includes('1.0.4.4-costean.10'), 'version reload: page still works after reload');
+}, { SERVED_WWW_VERSION: '1.0.4.4-costean.11' });
 console.log(fail ? `${fail} FAILED` : 'ALL OK'); process.exit(fail ? 1 : 0);

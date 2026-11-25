@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
-const WWW_VERSION = process.env.COSTEAN_VERSION || '1.0.4.4-costean.9';
+const WWW_VERSION = process.env.COSTEAN_VERSION || '1.0.4.4-costean.10';
 // Hashed asset names: the firmware sends no Cache-Control, so a new www.bin must not reuse old file names (stale browser cache).
 // Firmware file server only knows .html/.js/.css/.svg/.png/.json and serves "<path>.gz".
 export default defineConfig({

@@ -1,6 +1,6 @@
 # Costean OS for the BitLuck Nexus L1
 
-Version: **v1.0.4.4-costean.9** (experimental). Downloads are on the [Releases](../../releases/latest) page.
+Version: **v1.0.4.4-costean.10** (experimental). Downloads are on the [Releases](../../releases/latest) page.
 
 > [!WARNING]
 > **EXPERIMENTAL. For the BitLuck Nexus L1 (6x BM1491, ESP32-S3, 16 MB flash, 320x170 LCD) only.** Do not flash it on any other board. Flash at your own risk and keep the stock files handy (see [Recovery](#recovery-back-to-stock-v1044)).
@@ -11,10 +11,10 @@ Version: **v1.0.4.4-costean.9** (experimental). Downloads are on the [Releases](
 
 **Not affiliated with, or endorsed by, BitLuck.**
 
-costean.9 is the field-tested costean.4 / costean.6 firmware with the costean.8 LCD artwork (6x BM1491), plus the Costean OS control center web UI in the copper **Lode** theme, now with Profiles, Schedules and History. The app (firmware + LCD) is byte for byte the same as costean.8; only the web UI changed.
+costean.10 is the field-tested costean.4 / costean.6 firmware with the LCD artwork repainted in the copper **Lode** colours of the web UI (6x BM1491), plus the Costean OS control center web UI in the same Lode theme, with Profiles, Schedules and History. Compared with costean.9, only the LCD colours changed (and the web UI version label).
 
-- **App (firmware + LCD):** the costean.4 app (BitLuck nexus.v1.0.4.4 with the Costean OS LCD screen layout). As in costean.7, **only the pixel data of the built-in LCD background images was repainted**. The small leftover tag next to COSTEAN OS is gone, and the hash board text reads **6x BM1491**, matching the 6 chips the firmware drives. Each image keeps the same size, format, byte length and location. No code, layout or label bytes are changed, and only the image checksum and hash are recomputed. Mining, ASIC, power, fan and protection code are stock. The app reports version `costean-nexusl1-1.0.4.4`, and stock defaults are 1300 MHz / 1300 mV.
-- **Web UI:** the Costean OS control center, labelled costean.9, in the copper Lode theme. It shows the 6 chips the firmware reports.
+- **App (firmware + LCD):** the costean.4 app (BitLuck nexus.v1.0.4.4 with the Costean OS LCD screen layout). As in costean.7 / costean.8, **only the pixel data of the built-in LCD background images was repainted**, now in the Lode palette (background #0a0b0e / #121418, copper #ee8a4c / #d9733a, teal #3fd8c2, text #f3ede4). The one other changed byte pair is the colour of the uptime text (a 32-bit colour constant used only by that label), from blue-grey #8D98CC to the Lode grey #8E939C. The small leftover tag next to COSTEAN OS is gone, and the hash board text reads **6x BM1491**, matching the 6 chips the firmware drives. Each image keeps the same size, format, byte length and location. No instructions, layout or label text are changed, and only the image checksum and hash are recomputed. Mining, ASIC, power, fan and protection code are stock. The app reports version `costean-nexusl1-1.0.4.4`, and stock defaults are 1300 MHz / 1300 mV.
+- **Web UI:** the Costean OS control center, labelled costean.10, in the copper Lode theme. It shows the 6 chips the firmware reports.
 
 ## Web UI (Costean OS control center)
 
@@ -51,18 +51,18 @@ The stock Nexus L1 firmware has no scheduler and no time-zone setting, and Coste
 
 | File | What it is |
 | --- | --- |
-| `esp-miner-factory-NexusL1-v1.0.4.4-costean.9.bin` | Full 16 MB image for a **USB** install at offset **0x0**. |
-| `costean-nexusl1-factory-v1.0.4.4-costean.9.zip` | The same factory image, zipped. |
-| `esp-miner-NexusL1.bin` | App only, for **OTA** (costean.4 app with the repainted LCD images; identical to costean.8). |
+| `esp-miner-factory-NexusL1-v1.0.4.4-costean.10.bin` | Full 16 MB image for a **USB** install at offset **0x0**. |
+| `costean-nexusl1-factory-v1.0.4.4-costean.10.zip` | The same factory image, zipped. |
+| `esp-miner-NexusL1.bin` | App only, for **OTA** (costean.4 app with the LCD images repainted in the Lode colours). |
 | `www.bin` | Web UI only, for **OTA** (SPIFFS, 3 MB). |
 
 Check the files first: `sha256sum -c SHA256SUMS`
 
 ## Install
 
-- **OTA (keeps settings):** coming from costean.8, upload only `www.bin` (the app is unchanged). From anything older, upload **both** files: first `esp-miner-NexusL1.bin` (app with the LCD artwork), wait for the reboot, then `www.bin` (web UI).
+- **OTA (keeps settings):** upload **both** files (the app changed for the new LCD colours): first `esp-miner-NexusL1.bin` (app with the LCD artwork), wait for the reboot, then `www.bin` (web UI).
 - **USB (clean install, resets Wi-Fi and pools):**
-  `esptool --chip esp32s3 write-flash 0x0 esp-miner-factory-NexusL1-v1.0.4.4-costean.9.bin`
+  `esptool --chip esp32s3 write-flash 0x0 esp-miner-factory-NexusL1-v1.0.4.4-costean.10.bin`
   Then set up Wi-Fi from the `Nexus_…` hotspot (`192.168.4.1`).
 
 The stock "check for updates on GitHub" button installs the official BitLuck release, which removes Costean OS.
@@ -98,13 +98,13 @@ The whole chain reproduces the release files byte for byte, starting from the of
    - Gives SHA-256 `b77b7c57…41304e`.
    - Writes the Costean label positions, text colours, LCD images, version string and recovery page into the stock app.
    - Every patched instruction is decoded and checked before it is written.
-2. **LCD art (costean.8+):** `python3 tools/lcd/patch_images.py costean4.bin tools/lcd/art esp-miner-NexusL1.bin`
-   - Changes only the pixel data of the 9 LCD images. It refuses any other byte, and recomputes the image checksum and hash.
+2. **LCD art (costean.10):** `python3 tools/lcd/patch_images.py costean4.bin tools/lcd/art esp-miner-NexusL1.bin --lode-time`
+   - Changes only the pixel data of the 9 LCD images (and, with `--lode-time`, the uptime label's colour constant, checked to be read only by that label). It refuses any other byte, and recomputes the image checksum and hash.
    - The art is drawn by `tools/lcd/lcd-bgmain.cpp` (LVGL 8.3 host render).
 3. **Web UI:** `cd web && npm ci && npm test && npm run build`, then:
    `spiffsgen.py 0x300000 web/dist/axe-os www.bin --page-size 256 --block-size 4096 --obj-name-len 64 --meta-len 4 --use-magic --use-magic-len`
    The browser tests (`node e2e/shots.mjs`, `node e2e/shots-block.mjs`) run against a demo mock API only.
-4. **Factory image:** `python3 tools/make_factory.py <stock esp-miner-factory-NexusL1-v1.0.4.4.bin> esp-miner-NexusL1.bin www.bin esp-miner-factory-NexusL1-v1.0.4.4-costean.9.bin`
+4. **Factory image:** `python3 tools/make_factory.py <stock esp-miner-factory-NexusL1-v1.0.4.4.bin> esp-miner-NexusL1.bin www.bin esp-miner-factory-NexusL1-v1.0.4.4-costean.10.bin`
 
 More screenshots (all demo data, never a real miner) are in [`docs/screenshots/`](docs/screenshots/).
 

@@ -1,14 +1,18 @@
 // Costean OS look for NexusL1: renders the STATIC page backgrounds with LVGL 8.3 using the same drawing
-// primitives, palette and fonts as the Costean OS NerdOctAxe LCD (ui_octa.cpp). Live values are NOT drawn here: the stock
+// primitives and fonts as the Costean OS NerdOctAxe LCD (ui_octa.cpp). Live values are NOT drawn here: the stock
 // NexusL1 firmware draws them with its own labels (positions patched to land inside these cards).
 #include "displays/ui.h"
 #include <cstdio>
 #include <cstring>
 #include <cmath>
 LV_FONT_DECLARE(ui_font_vt323_21); LV_FONT_DECLARE(ui_font_vt323_35);
-static const uint32_t C_BG = 0x070B1C, C_CARD = 0x10173A, C_CARD2 = 0x0C1230, C_LINE = 0x2E3B78, C_LINE2 = 0x46549E,
-    C_TEXT = 0xEAF0FF, C_MUTE = 0x8D98CC, C_CYAN = 0x4FE3FF, C_BLUE = 0x5B8CFF, C_EBLUE = 0x2F7BFF, C_ICE = 0x8CD6FF,
-    C_GREEN = 0x5CF2A6, C_AMBER = 0xFFC75A, C_GOLD = 0xFFD66B;
+// costean.10: copper "Lode" palette, the same colours as the web UI (web/src/app.css). Names kept from the old blue
+// palette so the drawing code is unchanged: C_CYAN = --acc copper, C_EBLUE = --eblue deep copper, C_BLUE = --acc2 teal.
+// (costean.8 blue: BG 070B1C CARD 10173A CARD2 0C1230 LINE 2E3B78 LINE2 46549E TEXT EAF0FF MUTE 8D98CC CYAN 4FE3FF
+//  BLUE 5B8CFF EBLUE 2F7BFF ICE 8CD6FF GREEN 5CF2A6 AMBER FFC75A GOLD FFD66B)
+static const uint32_t C_BG = 0x0A0B0E, C_CARD = 0x181B21, C_CARD2 = 0x121418, C_LINE = 0x343842, C_LINE2 = 0x4A505C,
+    C_TEXT = 0xF3EDE4, C_MUTE = 0x8E939C, C_CYAN = 0xEE8A4C, C_BLUE = 0x3FD8C2, C_EBLUE = 0xD9733A, C_ICE = 0x7FE6D6,
+    C_GREEN = 0x86E39A, C_AMBER = 0xFFB547, C_GOLD = 0xF6CB6E;
 static const lv_font_t *F_S = &lv_font_montserrat_10, *F_M = &ui_font_vt323_21, *F_L = &ui_font_vt323_35;
 static lv_color_t C(uint32_t c) { return lv_color_hex(c); }
 static uint16_t fb[320 * 170];
